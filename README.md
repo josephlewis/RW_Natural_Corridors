@@ -1,6 +1,6 @@
 # Estimating the Scale-Dependent Influence of Natural Terrestrial Corridors on the Positioning of Settlements: A Multi-Scale Study of Roman Forts in Wales
 
-This repository contains all the data and scripts required to fully reproduce all analyses presented in the paper "Estimating the Scale-Dependent Influence of Natural Terrestrial Corridors on the Positioning of Settlements: A Multi-Scale Study of Roman Forts in Wales" authored by Lewis, J.
+This repository contains all the data and scripts required to fully reproduce all analyses presented in the paper "_Estimating the Scale-Dependent Influence of Natural Terrestrial Corridors on the Positioning of Settlements: A Multi-Scale Study of Roman Forts in Wales_" authored by Lewis, J.
 
 Getting Started
 ---------------
