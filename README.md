@@ -2,6 +2,11 @@
 
 This repository contains all the data and scripts required to fully reproduce all analyses presented in the paper "_Estimating the Scale-Dependent Influence of Natural Terrestrial Corridors on the Positioning of Settlements: A Multi-Scale Study of Roman Forts in Wales_" authored by Lewis, J.
 
+Preprint available: https://doi.org/10.31235/osf.io/mxas2
+
+Data and Code also available on Zenodo:
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4074956.svg)](https://doi.org/10.5281/zenodo.4074956)
+
 Getting Started
 ---------------
 
