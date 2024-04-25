@@ -52,3 +52,7 @@ loaded via a namespace (and not attached):
 [56] tmaptools_3.1-1       viridisLite_0.4.2     mgcv_1.8-42           rlang_1.1.1           Rcpp_1.0.11          
 [61] glue_1.6.2            DBI_1.1.3             rstudioapi_0.15.0     R6_2.5.1              units_0.8-3
 ```
+
+License
+---------------
+CC-BY 3.0 unless otherwise stated (see Licenses.md)
