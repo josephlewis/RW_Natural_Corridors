@@ -162,7 +162,7 @@ write.csv(nc_df, "./Output/nc_AIC.csv", row.names = FALSE)
 ### Figure 1 ######
 
 figure1A <- tm_shape(dem2, raster.downsample = FALSE) + 
-  tm_raster(style = "pretty", palette = grey.colors(5), legend.is.portrait = TRUE, title = "Elevation (m)", n = 5, legend.show = TRUE, alpha = 1) +
+  tm_raster(style = "fixed", breaks = c(0,216,432,648,865,1200), palette = rev(grey.colors(5)), legend.is.portrait = TRUE, title = "Elevation (m)", n = 5, legend.show = TRUE, alpha = 1) +
   tm_shape(rivers) + 
   tm_lines(col = "#9ECAE1", lty = 1, lwd = 1) + 
   tm_shape(sites[sites$Type == "Campaign base/Fort",]) + 
@@ -170,11 +170,14 @@ figure1A <- tm_shape(dem2, raster.downsample = FALSE) +
   tm_shape(sites[sites$Name %in% c("Clyro", "Rhyn Park"),]) + 
   tm_dots(col = "red", shape = 22, size = 0.2, border.col = "black") + 
   tm_shape(sites[sites$Name %in% c("Clyro", "Rhyn Park"),]) + 
-  tm_text("Name", size = 0.6, just = "top", ymod = -0.25, col = "white") + 
+  tm_text("Name", size = 0.6, just = "top", ymod = -0.25, col = "black") + 
   tm_shape(tribes) + 
-  tm_text("Name", size = 0.6, just = "top", col = "white", fontface = "bold") + 
+  tm_text("Name", size = 0.8, just = "top", col = "black", fontface = "bold", ymod = 0.5) +
+  tm_add_legend(type = "fill", col = "white", title = "Roman campaign base/fort") + 
   tm_layout(frame = TRUE, panel.label.bg.color = NA) + 
-  tm_layout(legend.position = c("left", "top"))
+  tm_layout(legend.position = c("left", "top"), legend.title.size = 0.6) + 
+  tm_scale_bar(breaks = seq(0, 50, 10), position = c("left", "bottom")) + 
+  tm_compass(type = "arrow")
 
 tmap::tmap_save(tm = figure1A, filename = "./Output/Figures/Figure1A.png", width = 5, height = 5, dpi = 300)
 
@@ -196,12 +199,13 @@ names(nc_nr) <- "A"
 names(cs_nc_nr) <- "B"
 
 figure2A <- tm_shape(cs_nc_nr, raster.downsample = FALSE) + 
-  tm_raster(style = "quantile", palette = "cividis", legend.is.portrait = TRUE, title = "Conductance", n = 5, labels = c("Low", rep("", 3), "High")) + 
+  tm_raster(style = "quantile", palette = "cividis", legend.is.portrait = TRUE, title = "Conductance", n = 10, labels = c("Low", rep("", 8), "High")) + 
   tm_layout(frame = TRUE, panel.label.bg.color = NA) + 
   tm_layout(legend.position = c("left", "top"), 
             main.title = "A", 
             main.title.position = "left",
-            title.position = c('left', 'top'))
+            title.position = c('left', 'top'), legend.title.size = 0.8) + 
+  tm_compass(type = "arrow", position = c("left", "bottom"))
 
 polygony_vect3 <- polygony_vect2
 polygony_vect3 <- sf::st_as_sf(polygony_vect3)
@@ -209,14 +213,15 @@ sf::st_crs(polygony_vect3) <- sf::st_crs(dem2)
 polygony_vect3 <- polygony_vect3[!is.na(terra::extract(dem2, polygony_vect3)$HP40),]
 
 figure2B <- tm_shape(nc_nr, raster.downsample = FALSE) + 
-  tm_raster(style = "fisher", palette = "cividis", legend.is.portrait = TRUE, title = "Density of LCPs crossing each cell", n = 10, labels = c("Low", rep("", 8), "High")) + 
+  tm_raster(style = "fisher", palette = "cividis", legend.is.portrait = TRUE, title = "Density of least-cost paths crossing each cell", n = 10, labels = c("Low", rep("", 8), "High")) + 
   tm_shape(polygony_vect3) + 
   tm_dots(col = "grey85") + 
   tm_layout(frame = TRUE, panel.label.bg.color = NA) + 
   tm_layout(legend.position = c("left", "top"), 
             main.title = "B", 
             main.title.position = "left",
-            title.position = c('left', 'top'))
+            title.position = c('left', 'top'), legend.title.size = 0.8) + 
+  tm_scale_bar(breaks = seq(0, 50, 10), position = c("left", "bottom"))
 
 Figure2 <- tmap::tmap_arrange(figure2A, figure2B, ncol = 2)
 tmap::tmap_save(tm = Figure2, filename = "./Output/Figures/Figure2.png", width = 10, height = 5, dpi = 300)
@@ -231,7 +236,7 @@ Figure3C_rasts <- (c(terra::rast(nc_br2_filepaths[5]), terra::rast(nc_br2_filepa
 names(Figure3C_rasts) <- c("900m", "4,900m", "9,900m", "14,900")
 
 Figure3A <- tm_shape(Figure3A_rasts, raster.downsample = FALSE) + 
-  tm_raster(style = "fisher", palette = "cividis", legend.is.portrait = FALSE, title = "Density of LCPs\ncrossing cell", n = 10, labels = c("Low", rep("", 8), "High")) + 
+  tm_raster(style = "fisher", palette = "cividis", legend.is.portrait = FALSE, title = "Density of least-cost paths crossing each cell", n = 10, labels = c("Low", rep("", 8), "High")) + 
   tm_facets(ncol = 4) + 
   tm_layout(main.title = "A", 
             main.title.position = "left",
@@ -240,7 +245,7 @@ Figure3A <- tm_shape(Figure3A_rasts, raster.downsample = FALSE) +
             legend.outside.position = "bottom")
 
 Figure3B <- tm_shape(Figure3B_rasts, raster.downsample = FALSE) + 
-  tm_raster(style = "fisher", palette = "cividis", legend.is.portrait = FALSE, title = "Density of LCPs\ncrossing cell", n = 10, labels = c("Low", rep("", 8), "High")) + 
+  tm_raster(style = "fisher", palette = "cividis", legend.is.portrait = FALSE, title = "Density of least-cost paths crossing each cell", n = 10, labels = c("Low", rep("", 8), "High")) + 
   tm_facets(ncol = 4) + 
   tm_layout(main.title = "B", 
             main.title.position = "left",
@@ -249,7 +254,7 @@ Figure3B <- tm_shape(Figure3B_rasts, raster.downsample = FALSE) +
             legend.outside.position = "bottom")
 
 Figure3C <- tm_shape(Figure3C_rasts, raster.downsample = FALSE) + 
-  tm_raster(style = "fisher", palette = "cividis", legend.is.portrait = FALSE, title = "Density of LCPs crossing cell", n = 10, labels = c("Low", rep("", 8), "High")) + 
+  tm_raster(style = "fisher", palette = "cividis", legend.is.portrait = FALSE, title = "Density of least-cost paths crossing each cell", n = 10, labels = c("Low", rep("", 8), "High")) + 
   tm_facets(ncol = 4) + 
   tm_layout(main.title = "C", 
             main.title.position = "left",
@@ -263,12 +268,14 @@ tmap::tmap_save(tm = Figure3, filename = "./Output/Figures/Figure3.png", width =
 ##### FIGURE 4 ######
 
 Figure4A <- tm_shape(terra::rast(nc_nr2_filepaths[6]), raster.downsample = FALSE) + 
-  tm_raster(style = "fisher", palette = "cividis", legend.is.portrait = TRUE, title = "Density of LCPs crossing each cell", n = 10, labels = c("Low", rep("", 8), "High")) + 
+  tm_raster(style = "fisher", palette = "cividis", legend.is.portrait = TRUE, title = "Density of least-cost paths crossing each cell", n = 10, labels = c("Low", rep("", 8), "High")) + 
   tm_shape(sites[sites$Type == "Campaign base/Fort",]) + 
-  tm_dots(col = "red", shape = 22, size = 0.5, border.col = "black") + 
+  tm_dots(col = "white", shape = 22, size = 0.5, border.col = "black") + 
+  tm_add_legend(type = "fill", labels = "Roman campaign base/fort", col = "white") + 
   tm_layout(main.title = "A B", 
             main.title.position = "left",
-            title.position = c('left', 'top'))
+            title.position = c('left', 'top'), legend.title.size = 0.8) + 
+  tm_scale_bar(breaks = seq(0, 50, 10), position = c("left", "bottom"))
 
 tmap::tmap_save(tm = Figure4A, filename = "./Output/Figures/Figure4A.png", width = 10, height = 10, dpi = 300)
 
@@ -281,12 +288,11 @@ Figure4B <- ggplot(nc_df) +
   scale_x_continuous(labels = scales::comma, breaks = seq(0, 37, 2), expand = c(0,1)) +
   scale_colour_manual(values = c("#4daf4a", "#377eb8", "#e41a1c")) + 
   scale_fill_manual(values = c("#4daf4a", "#377eb8", "#e41a1c")) + 
-  labs(x = "Scale of Window (km)", y = "Δ Akaike information criterion (AIC) score") +
+  labs(x = "Scale of Window (km)", y = "Change in Akaike information criterion (AIC) score") +
   theme_bw() + 
   theme(legend.position = "bottom",
         legend.justification = "right",
         axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
-  guides(colour= guide_legend(nrow=3,byrow=TRUE, title.position = "top")) + 
-  coord_flip()
+  guides(colour= guide_legend(nrow=1,byrow=TRUE, title.position = "top"))
 
-ggplot2::ggsave(plot = Figure4B, filename = "./Output/Figures/Figure4B.png", dpi = 300, width = 6, height = 10)
+ggplot2::ggsave(plot = Figure4B, filename = "./Output/Figures/Figure4B.png", dpi = 300, width = 10, height = 6)
